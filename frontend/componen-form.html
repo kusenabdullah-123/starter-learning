@@ -1,0 +1,30 @@
+<!-- ganti formGrup sesuaikan ts bisa auto -->
+<form [formGroup]="formGrup" (ngSubmit)="submit()" #ngFormGrup="ngForm" >
+  <wui-modal #modal [width]="400">
+      <div class="wui-modal-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <!-- ganti label sesuaikan nama -->
+              <div>{{aksi == 'insert' ? 'Grup Baru' : 'Edit Grup'}}</div>
+              <button class="wui-button wui-button-smooth wui-button-icon" type="button" (click)="close()">
+                  <wui-icon icon="close"></wui-icon>
+              </button>
+          </div>
+      </div>
+
+      <div class="wui-modal-content pt-2">
+      <!-- sesuaikan isi form  (satu form wui form field) -->
+            <wui-form-field class="wui-form-field-narrow wui-form-field-boxed" [class.has-error]="(ngFormGrup.submitted || formGrup.controls['nmGrup'].dirty) && formGrup.controls['nmGrup'].invalid">
+              <label for="nmGrup">Nama Grup</label>
+              <input id="nmGrup" type="text" wuiInput formControlName="nmGrup">
+              <div class="wui-form-field-hint" *ngIf="(ngFormGrup.submitted || formGrup.controls['nmGrup'].dirty) && formGrup.controls['nmGrup'].invalid">
+                  <span *ngIf="formGrup.controls['nmGrup'].getError('required') == true">Nama Grup Harus diisi</span>
+                  <span *ngIf="formGrup.controls['nmGrup'].getError('invalid') == true">{{formGrup.controls['nmGrup'].getError('invalidReason')}}i</span>
+              </div>
+          </wui-form-field>
+
+      </div>
+      <div class="wui-modal-footer">
+        <button class="wui-button wui-button-primary" type="submit">Simpan</button>
+      </div>
+  </wui-modal>
+</form>
