@@ -1,0 +1,84 @@
+<wui-modal #modal [width]="500">
+  <div class="wui-modal-header">
+      <div class="d-flex align-items-center">
+          <div class="flex-grow-1">
+              <input type="text" class="search-input" placeholder="Kata Kunci..." #searchInput (keyup)="$search.next($event)">
+          </div>
+          <button class="wui-button wui-button-smooth wui-button-icon" type="button" (click)="close()">
+              <wui-icon icon="close"></wui-icon>
+          </button>
+      </div>
+  </div>
+
+  <div class="wui-modal-content wui-modal-content-no-padding">
+    <div class="wui-table-responsive">
+        <table class="wui-table wui-table-hover">
+            <thead>
+            <tr>
+              <!-- sesuaikan dengan component -->
+                <th class="align-middle">Nama Grup</th>
+                <th></th>
+            </tr>
+            </thead>
+      
+            <tbody>
+              @if (dataGrup.length == 0 ) {
+                  <tr>
+                      <td colspan="2">Tidak ada data</td>
+                  </tr>
+              }@else {
+                @for (grup of dataGrup; track $index) {
+                    <tr>
+                        <td class="align-middle">
+                            <div class="d-flex align-items-center">
+                                <div class="me-4">
+                                    <wui-icon icon="account-multiple"></wui-icon>
+                                </div>
+                                <div>{{grup?.nmGrup}}</div>
+                            </div>
+                        </td>
+                        <td class="text-end">
+                            <button class="wui-button wui-button-smooth wui-button-icon" (click)="select(grup)">
+                                <wui-icon icon="chevron-right"></wui-icon>
+                            </button>
+                        </td>
+                    </tr>
+                }
+              }
+            </tbody>
+        </table>
+      </div>
+
+      <div class="wui-modal-footer d-flex flex-column flex-md-row justify-content-between pt-3 border-top">
+        <div class="d-flex d-md-inline-flex align-items-center">
+            <div class="d-inline-flex">
+                <button class="wui-button wui-button-smooth wui-button-icon" (click)="first()" [disabled]="count == 0 || page == 1">
+                    <wui-icon icon="page-first"></wui-icon>
+                </button>
+                <button class="wui-button wui-button-smooth wui-button-icon" (click)="prev()" [disabled]="count == 0 || page == 1">
+                    <wui-icon icon="chevron-left"></wui-icon>
+                </button>
+            </div>
+            <div class="flex-grow-1 px-2 font-weight-500 text-center">
+                {{offset + 1}} - {{offset + limit >= count ? count : (offset + limit)}} dari {{count}} baris
+            </div>
+            <div class="d-inline-flex">
+                <button class="wui-button wui-button-smooth wui-button-icon" (click)="next()" [disabled]="count == 0 || page == pageCount">
+                    <wui-icon icon="chevron-right"></wui-icon>
+                </button>
+                <button class="wui-button wui-button-smooth wui-button-icon" (click)="last()" [disabled]="count == 0 || page == pageCount">
+                    <wui-icon icon="page-last"></wui-icon>
+                </button>
+            </div>
+        </div>
+
+        <!-- sesuaikan dengan function -->
+        <button class="wui-button wui-button-primary wui-button-block" type="button" (click)="tambahGrup()">
+            <wui-icon icon="plus"></wui-icon>Baru
+        </button>
+    </div>
+  </div>
+</wui-modal>
+
+<!-- sesuaikan dengan nama -->
+<app-grup-form #formgrup [embed]="true"></app-grup-form>
