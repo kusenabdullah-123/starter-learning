@@ -1,0 +1,91 @@
+<div class="mt-5 mb-4">
+  <div class="d-flex justify-content-between align-items-center">
+      <button class="wui-button wui-button-primary me-2" routerLink="baru">
+          <wui-icon icon="plus"></wui-icon> Baru
+      </button>
+  
+      <div class="d-flex">
+          <wui-form-field class="wui-form-field-boxed wui-form-field-narrow mb-0 me-2 d-none d-md-inline-block search-input">
+              <div class="wui-form-field-prefix">
+                  <wui-icon icon="magnify"></wui-icon>
+              </div>
+              <input id="search" type="text" wuiInput placeholder="Cari..." (keyup)="$search.next($event)">
+          </wui-form-field>
+  
+          <button class="wui-button" (click)="refresh()">
+              <wui-icon icon="refresh"></wui-icon>Refresh
+          </button>
+      </div>
+  </div>
+</div>
+
+<wui-form-field class="wui-form-field-boxed wui-form-field-narrow mb-0 me-2 d-block d-md-none">
+  <div class="wui-form-field-prefix">
+      <wui-icon icon="magnify"></wui-icon>
+  </div>
+  <input id="search" type="text" wuiInput placeholder="Cari..." (keyup)="$search.next($event)">
+</wui-form-field>
+
+<div class="wui-table-responsive wui-edge-fix">
+  <table class="wui-table wui-table-hover">
+      <thead>
+        <!-- sesuaikan tabel dengan field -->
+      <tr>
+          <th class="align-middle">Nama Grup</th>
+          <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+        @if (dataGrup.length == 0 ) {
+            <tr>
+                <td colspan="2">Tidak ada data</td>
+            </tr>
+        }@else {
+          @for (grup of dataGrup; track $index) {
+              <tr>
+                  <td class="align-middle">
+                      <div class="d-flex align-items-center">
+                          <div class="me-4">
+                              <wui-icon icon="account-multiple"></wui-icon>
+                          </div>
+                          <div>{{grup?.nmGrup}}</div>
+                      </div>
+                  </td>
+                  <td class="text-end">
+                      <button class="wui-button wui-button-icon wui-button-smooth" [wuiMenu]="rowMenu" (click)="selectedIndex = $index">
+                          <wui-icon icon="dots-vertical"></wui-icon>
+                      </button>
+                  </td>
+              </tr>
+          }
+        }
+      </tbody>
+  </table>
+</div>
+
+<div class="wui-pagination mt-3 inside-container">
+  <button class="wui-button wui-button-icon wui-button-smooth" (click)="first()" [disabled]="count == 0 || page == 1">
+      <wui-icon icon="page-first"></wui-icon>
+  </button>
+  <button class="wui-button wui-button-icon wui-button-smooth" (click)="prev()" [disabled]="count == 0 || page == 1">
+      <wui-icon icon="chevron-left"></wui-icon>
+  </button>
+  <div class="wui-pagination-label flex-grow-1 px-4">
+      <span *ngIf="isLoading">Memuat...</span>
+      <span *ngIf="!isLoading">{{offset + 1}} - {{count < (offset + limit) ? count : (offset + limit)}} dari {{count | number: '1.0-2'}} baris</span>
+  </div>
+  <button class="wui-button wui-button-icon wui-button-smooth" (click)="next()" [disabled]="count == 0 || page == pageCount">
+      <wui-icon icon="chevron-right"></wui-icon>
+  </button>
+  <button class="wui-button wui-button-icon wui-button-smooth" (click)="last()" [disabled]="count == 0 || page == pageCount">
+      <wui-icon icon="page-last"></wui-icon>
+  </button>
+</div>
+
+<router-outlet></router-outlet>
+
+<wui-menu class="compact" #rowMenu>
+  <wui-menu-item icon="pencil" routerLink="edit/{{dataGrup[selectedIndex]?.idGrup}}" queryParamsHandling="merge">Edit</wui-menu-item>
+  <wui-menu-item icon="trash-can" (click)="hapus()">Hapus</wui-menu-item>
+</wui-menu>
